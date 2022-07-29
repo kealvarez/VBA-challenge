@@ -1,0 +1,59 @@
+Sub multiple_year_stock_data():
+
+For Each aws In Worksheets
+    
+Dim ActiveWorksheet As String
+Dim TickerCount As Long
+Dim PercentChange As Double
+Dim i As Long
+Dim j As Long
+
+aws.Range("I1").Value = "Ticker"
+aws.Range("J1").Value = "Yearly Change"
+aws.Range("K1").Value = "Percent Change"
+aws.Range("L1").Value = "Total Stock Volume"
+
+ActiveWorksheet = aws.Name
+ 
+TickerCount = 2
+        
+  j = 2
+        
+        LastRowA = aws.Cells(Rows.Count, 1).End(xlUp).Row
+
+        For i = 2 To LastRowA
+            
+            If aws.Cells(i + 1, 1).Value <> aws.Cells(i, 1).Value Then
+                aws.Cells(TickerCount, 9).Value = aws.Cells(i, 1).Value
+                aws.Cells(TickerCount, 10).Value = aws.Cells(i, 6).Value - aws.Cells(j, 3).Value
+                
+            If aws.Cells(TickerCount, 10).Value < 0 Then
+                aws.Cells(TickerCount, 10).Interior.ColorIndex = 3
+                
+            Else
+                aws.Cells(TickerCount, 10).Interior.ColorIndex = 4
+                
+            End If
+                    
+            If aws.Cells(j, 3).Value <> 0 Then
+                PercentChange = ((aws.Cells(i, 6).Value - aws.Cells(j, 3).Value) / aws.Cells(j, 3).Value)
+                aws.Cells(TickerCount, 11).Value = Format(PercentChange, "Percent")
+                    
+            Else
+                aws.Cells(TickerCount, 11).Value = Format(0, "Percent")
+                    
+            End If
+
+                aws.Cells(TickerCount, 12).Value = WorksheetFunction.Sum(Range(aws.Cells(j, 7), aws.Cells(i, 7)))
+   
+        TickerCount = TickerCount + 1
+ 
+                j = i + 1
+            
+            End If
+            
+        Next i
+    
+    Next aws
+        
+End Sub
